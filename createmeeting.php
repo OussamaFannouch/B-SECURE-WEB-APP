@@ -1,24 +1,29 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+session_start();
 error_reporting(E_ALL);
 require_once './backend/connection.php';
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $title = $conn->real_escape_string($_POST['title']);
-    $description = $conn->real_escape_string($_POST['description']); // Added this line
+    $description = $conn->real_escape_string($_POST['description']);
     $date = $conn->real_escape_string($_POST['date']);
     $time = $conn->real_escape_string($_POST['time']);
-    $query = "INSERT INTO meetings (title, description, date, time) VALUES (?, ?, ?, ?)"; // Modified this line
+
+    // Query to insert a new meeting
+    $query = "INSERT INTO meetings (title, description, date, time) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
     
     if ($stmt === false) {
         die('Prepare failed: ' . htmlspecialchars($conn->error));
     }
     
-    $stmt->bind_param("ssss", $title, $description, $date, $time); // Modified this line
+    $stmt->bind_param("ssss", $title, $description, $date, $time);
     $stmt->execute();
+
     if ($stmt->affected_rows === 1) {
-        echo "<script>alert('Meeting created successfully!');</script>";
+        // Redirect to dashboard.php after successful creation
+        header("Location: /Bseccopie/dashboard.php");
+        exit();
     } else {
         echo "<script>alert('Failed to create meeting.');</script>";
     }

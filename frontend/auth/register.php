@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <link rel="icon" href="../media/Webclip.png" type="image/x-icon" />
     <link rel="shortcut icon" href="../media/Webclip.png" type="image/x-icon" />
     <meta charset="UTF-8" />
@@ -22,8 +22,8 @@
     <!-- MAIN CSS FILE -->
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/register.css" />
-  </head>
-  <body>
+</head>
+<body>
     <header class="header">
       <div class="container">
         <nav class="nav flex">
@@ -39,8 +39,8 @@
           </a>
           <ul class="nav_list flex desktop_list">
             <li class="nav_link middle"><a href="#gallery">Club Gallery</a></li>
-            <li class="nav_link middle"><a href="../auth/register.html">Register</a></li>
-            <li class="nav_link middle"><a href="../auth/login.html">Login</a></li>
+            <li class="nav_link middle"><a href="../auth/register.php">Register</a></li>
+            <li class="nav_link middle"><a href="../auth/login.php">Login</a></li>
           </ul>
           <div class="nav_icon hidden">
             <span></span>
@@ -54,39 +54,36 @@
     <main class="main-content">
       <div class="form-container">
         <form class="form" action="http://localhost/Bseccopie/backend/testregistry.php" method="POST">
-            <p class="title">Register </p>
-            <p class="message">Signup now and get full access to our app. </p>
-                <div class="flex">
-                <label>
-                    <input class="input" type="FirstName" id="FirstName" name="FirstName"  placeholder="" required="">
-                    <span>Firstname</span>
-                </label>
-        
-                <label>
-                    <input class="input" type="LastName" id="LastName" name="LastName" placeholder="" required="">
-                    <span>Lastname</span>
-                </label>
-            </div>  
-                    
-            <label>
-                <input class="input" type="email" id="email" name="email" placeholder="" required="">
-                <span>Email</span>
-            </label> 
-                
-            <label>
-                <input class="input" type="password" id="password" name="password" placeholder="" required="">
-                <span>Password</span>
-            </label>
-            <label>
-                <input class="input" type="password" id="confirm_password" name="confirm_password" placeholder="" required="">
-                <span>Confirm password</span>
-            </label>
-            <button class="submit">Submit</button>
-            <p class="signin">Already have an acount ? <a href="../auth/login.html">Signin</a> </p>
-        </form>
-      </div>
+          <p class="title">Register</p>
+          <!-- Error Message Display -->
+          <?php
+          if (!empty($errors)) {
+              echo "<div class='error-messages'>";
+              foreach ($errors as $error) {
+                  echo "<p class='error-message'>$error</p>";
+              }
+              echo "</div>";
+          }
+          ?>
+          <label>
+              <input class="input" type="text" name="firstName" placeholder="" required>
+              <span>First Name</span>
+          </label>
+          <label>
+              <input class="input" type="text" name="lastName" placeholder="" required>
+              <span>Last Name</span>
+          </label>
+          <label>
+              <input class="input" type="email" name="email" placeholder="" required>
+              <span>Email</span>
+          </label>
+          <label>
+              <input class="input" type="password" name="password" placeholder="" required>
+              <span>Password</span>
+          </label>
+          <button class="submit">Register</button>
+          <p class="signin">Already have an account? <a href="../auth/login.php">Login</a></p>
+      </form>
     </main>
-
-    <script src="../script.js"></script>
   </body>
 </html>

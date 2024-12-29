@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['firstName'] = $user['firstName'];
             $_SESSION['lastName'] = $user['lastName'];
-            header("Location: /Bseccopie/dashboard.html");
+            header("Location: /Bseccopie/dashboard.php");
             exit();
         } else {
             // Incorrect password
@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // Redirect back to login page with error
-    header("Location: /Bseccopie/frontend/auth/test.php");
+    header("Location: /Bseccopie/frontend/auth/login.php");
     exit();
 }
 
