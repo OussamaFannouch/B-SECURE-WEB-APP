@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         // Prepare and execute the query
-        $query = "INSERT INTO users (firstName, lastName, email, password) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO users (firstName, lastName, email, password, role) VALUES (?, ?, ?, ?, 'member')";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("ssss", $firstName, $lastName, $email, $hashedPassword);
 
