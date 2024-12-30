@@ -1,3 +1,11 @@
+<?php
+session_start();
+$errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
+$form_data = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : [];
+unset($_SESSION['errors']);
+unset($_SESSION['form_data']);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,21 +68,21 @@
           if (!empty($errors)) {
               echo "<div class='error-messages'>";
               foreach ($errors as $error) {
-                  echo "<p class='error-message'>$error</p>";
+                  echo "<p class='error-message' style='color: red; font-size: 14px;'>$error</p>";
               }
               echo "</div>";
           }
           ?>
           <label>
-              <input class="input" type="text" name="firstName" placeholder="" required>
+              <input class="input" type="text" name="firstName" placeholder="" value="<?php echo isset($form_data['firstName']) ? htmlspecialchars($form_data['firstName']) : ''; ?>" required>
               <span>First Name</span>
           </label>
           <label>
-              <input class="input" type="text" name="lastName" placeholder="" required>
+              <input class="input" type="text" name="lastName" placeholder="" value="<?php echo isset($form_data['lastName']) ? htmlspecialchars($form_data['lastName']) : ''; ?>" required>
               <span>Last Name</span>
           </label>
           <label>
-              <input class="input" type="email" name="email" placeholder="" required>
+              <input class="input" type="email" name="email" placeholder="" value="<?php echo isset($form_data['email']) ? htmlspecialchars($form_data['email']) : ''; ?>" required>
               <span>Email</span>
           </label>
           <label>
@@ -82,7 +90,7 @@
               <span>Password</span>
           </label>
           <button class="submit">Register</button>
-          <p class="signin">Already have an account? <a href="../auth/login.php">Login</a></p>
+          <p class="signin">Already have an account? <a href="login.php">Login</a></p>
       </form>
     </main>
   </body>

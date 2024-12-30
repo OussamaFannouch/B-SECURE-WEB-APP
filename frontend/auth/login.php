@@ -37,8 +37,8 @@ session_start(); // Start session to access error messages
           </a>
           <ul class="nav_list flex desktop_list">
             <li class="nav_link middle"><a href="../index.html#gallery">Club Gallery</a></li>
-            <li class="nav_link middle"><a href="../auth/register.html">Register</a></li>
-            <li class="nav_link middle"><a href="../auth/login.html">Login</a></li>
+            <li class="nav_link middle"><a href="../auth/register.php">Register</a></li>
+            <li class="nav_link middle"><a href="../auth/login.php">Login</a></li>
           </ul>
           <div class="nav_icon hidden">
             <span></span>
