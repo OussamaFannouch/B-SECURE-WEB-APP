@@ -73,7 +73,7 @@ session_start(); // Start session to access error messages
           </label>
       
           <button class="submit">Submit</button>
-          <p class="signin">Forgot Password? <a href="../auth/login.html">Reset Password</a></p>
+          <p class="signin">Forgot Password? <a href="../auth/login.php">Reset Password</a></p>
         </form>
       </div>
     </main>

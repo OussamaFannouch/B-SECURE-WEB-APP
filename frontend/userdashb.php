@@ -292,7 +292,7 @@ $conn->close();
                 Create Meeting
             </a>
             <?php endif; ?>
-            <a href="/Bseccopie/meetings.php" class="nav-link">
+            <a href="/Bseccopie/dashboard.php" class="nav-link">
                 <i class="fas fa-calendar"></i>
                 View Meetings
             </a>

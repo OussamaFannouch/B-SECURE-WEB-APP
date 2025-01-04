@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $update_stmt->execute();
             $update_stmt->close();
 
-            header("Location: /Bseccopie/dashboard.php");
+            header("Location: /Bseccopie/frontend/userdashb.php");
             exit();
         } else {
             // Incorrect password
