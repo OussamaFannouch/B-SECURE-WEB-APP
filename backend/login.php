@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = $_POST['password'];
 
     // Prepare query to check user credentials
-    $query = "SELECT id, firstName, lastName, password FROM users WHERE email = ?";
+    $query = "SELECT id, firstName, lastName, password, role FROM users WHERE email = ?";
     $stmt = $conn->prepare($query);
 
     if ($stmt === false) {
@@ -34,6 +34,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['firstName'] = $user['firstName'];
             $_SESSION['lastName'] = $user['lastName'];
+            $_SESSION['role'] = $user['role'];
+
+            // Update last login time
+            $update_query = "UPDATE users SET last_login = NOW() WHERE id = ?";
+            $update_stmt = $conn->prepare($update_query);
+            $update_stmt->bind_param("i", $user['id']);
+            $update_stmt->execute();
+            $update_stmt->close();
+
             header("Location: /Bseccopie/dashboard.php");
             exit();
         } else {

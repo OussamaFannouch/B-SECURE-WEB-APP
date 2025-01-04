@@ -3,6 +3,13 @@ session_start();
 error_reporting(E_ALL);
 require_once './backend/connection.php';
 
+// Vérifier si l'utilisateur est connecté et a le rôle d'administrateur
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    // Rediriger vers la page de connexion ou afficher un message d'erreur
+    header("Location: login.php");
+    exit();
+}
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $title = $conn->real_escape_string($_POST['title']);
     $description = $conn->real_escape_string($_POST['description']);
