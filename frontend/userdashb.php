@@ -278,9 +278,23 @@ $conn->close();
             transform: translateY(0);
         }
     }
+    .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 15, 41, 0.95);
+            padding: 15px 30px;
+            border-bottom: 1px solid #4facfe;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
+
     <header class="header">
         <a href="/Bseccopie/frontend/index.html" class="logo">
             <img src="/Bseccopie/frontend/media/logo.png" alt="B-Secure Logo">
@@ -296,7 +310,7 @@ $conn->close();
                 <i class="fas fa-calendar"></i>
                 View Meetings
             </a>
-            <a href="/Bseccopie/logout.php" class="nav-link">
+            <a href="/Bseccopie/frontend/auth/login.php" class="nav-link">
                 <i class="fas fa-sign-out-alt"></i>
                 Logout
             </a>

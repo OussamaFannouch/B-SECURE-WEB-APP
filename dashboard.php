@@ -4,10 +4,23 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once './backend/connection.php'; // Include your database connection file
+require_once './backend/connection.php';
+
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Check if user is logged in and get role
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
+$userRole = $_SESSION['role'] ?? 'member'; // Default to member if role not set
 
 // Fetch meetings from the database
-$query = "SELECT id, title, date, time FROM meetings ORDER BY date, time";
+$query = "SELECT id, title, description, date, time FROM meetings ORDER BY date, time";
 $result = $conn->query($query);
 
 // Check for query errors
@@ -20,80 +33,272 @@ if (!$result) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cybersecurity Club Meetings</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-    />
+    <title>Cybersecurity Club Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #00b4d8;
+            --secondary-color: #7b2cbf;
+            --background-dark: #1b1b1b;
+            --text-light: #ffffff;
+            --card-bg: #242424;
+            --hover-color: #2a2a2a;
+            --header-bg: #0a0a1a;
+        }
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f4f4f9;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             margin: 0;
-            padding: 0;
-        }
-        .form-container {
-            max-width: 800px;
-            margin: 40px auto;
-            background: #fff;
             padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            min-height: 100vh;
+            color: var(--text-light);
         }
+
+        .form-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: rgba(36, 36, 36, 0.95);
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h2 {
+            color: var(--text-light);
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0 8px;
             margin-top: 20px;
         }
-        table th, table td {
-            border: 1px solid #ddd;
-            padding: 8px;
+
+        table th {
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
             text-align: left;
         }
-        table th {
-            background-color: #1b4e72;
-            color: #fff;
+
+        table td {
+            background: var(--card-bg);
+            padding: 15px;
+            color: var(--text-light);
         }
-        table tr:nth-child(even) {
-            background-color: #f9f9f9;
+
+        table tr:hover td {
+            background: var(--hover-color);
+            transform: scale(1.01);
+            transition: all 0.3s ease;
         }
-        table tr:hover {
-            background-color: #f1f1f1;
+
+        table th:first-child,
+        table td:first-child {
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+
+        table th:last-child,
+        table td:last-child {
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .download-btn {
+            background: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="email"] {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: var(--text-light);
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        input[type="email"]::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        input[type="email"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.2);
+        }
+
+        .no-meetings {
+            text-align: center;
+            padding: 30px;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px var(--primary-color); }
+            50% { box-shadow: 0 0 20px var(--primary-color); }
+            100% { box-shadow: 0 0 5px var(--primary-color); }
+        }
+
+        /* Existing styles remain the same */
+        /* ... (keep all your existing styles) ... */
+        /* New header styles */
+        .header {
+            background-color: var(--header-bg);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button.create {
+            background-color: var(--primary-color);
+        }
+
+        .nav-button.view {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+        }
+
+        .nav-button.logout {
+            background-color: transparent;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-button.create:hover {
+            background-color: #0095b3;
+        }
+
+        .nav-button.view:hover {
+            background-color: rgba(0, 180, 216, 0.1);
+        }
+
+        .nav-button.logout:hover {
+            background-color: rgba(255, 68, 68, 0.1);
         }
     </style>
 </head>
 <body>
+    <header class="header">
+        <div class="logo">
+            <img src="/Bseccopie/frontend/media/logo.png" alt="Cybersecurity Club Logo">
+        </div>
+        <nav class="nav-buttons">
+            <?php if ($userRole === 'admin'): ?>
+                <a href="/Bseccopie/createmeeting.php" class="nav-button create">
+                    <i class="fas fa-plus"></i> Create Meeting
+                </a>
+            <?php endif; ?>
+            <a href="/Bseccopie/dashboard.php" class="nav-button view">
+                <i class="fas fa-calendar"></i> View Meetings
+            </a>
+            <a href="logout.php" class="nav-button logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+    </header>
+
+    <!-- Your existing form container and table code -->
     <div class="form-container">
-        <h2>Upcoming Meetings</h2>
+    <h2><i class="fas fa-shield-alt"></i> Upcoming Meetings</h2>
         <table>
             <thead>
                 <tr>
-                    <th>Title</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Action</th>
+                    <th><i class="fas fa-heading"></i> Title</th>
+                    <th><i class="fas fa-align-left"></i> Description</th>
+                    <th><i class="fas fa-calendar"></i> Date</th>
+                    <th><i class="fas fa-clock"></i> Time</th>
+                    <th><i class="fas fa-tasks"></i> Action</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if ($result->num_rows > 0): ?>
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
-                            <td><?= htmlspecialchars($row['title']); ?></td>
-                            <td><?= htmlspecialchars($row['date']); ?></td>
-                            <td><?= htmlspecialchars($row['time']); ?></td>
+                            <td><?php echo htmlspecialchars($row['title']); ?></td>
+                            <td><?php echo htmlspecialchars($row['description']); ?></td>
+                            <td><?php echo date('d/m/Y', strtotime($row['date'])); ?></td>
+                            <td><?php echo date('H:i', strtotime($row['time'])); ?></td>
                             <td>
-                                <form action="register.php" method="POST">
-                                    <input type="hidden" name="meeting_id" value="<?= htmlspecialchars($row['id']); ?>">
-                                    <label for="email">Your Email:</label>
-                                    <input type="email" name="email" required>
-                                    <button type="submit">Register</button>
+                                <form action="generate_pdf.php" method="POST">
+                                    <input type="hidden" name="meeting_id" value="<?php echo $row['id']; ?>">
+                                    <input type="email" name="email" placeholder="Enter your email" required>
+                                    <button type="submit" class="download-btn">
+                                        <i class="fas fa-download"></i> Register & Download
+                                    </button>
                                 </form>
                             </td>
                         </tr>
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="4">No upcoming meetings.</td>
+                        <td colspan="5" class="no-meetings">No upcoming meetings scheduled.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
@@ -101,7 +306,4 @@ if (!$result) {
     </div>
 </body>
 </html>
-<?php
-// Close the database connection
-$conn->close();
-?>
+<?php $conn->close(); ?>

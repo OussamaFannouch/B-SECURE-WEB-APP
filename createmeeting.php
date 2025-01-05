@@ -2,7 +2,10 @@
 session_start();
 error_reporting(E_ALL);
 require_once './backend/connection.php';
-
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    header("Location: /Bseccopie/frontend/auth/login.php");
+    exit();
+}
 // Vérifier si l'utilisateur est connecté et a le rôle d'administrateur
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     // Rediriger vers la page de connexion ou afficher un message d'erreur
@@ -44,6 +47,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create a New Meeting</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         /* Previous styles remain exactly the same */
         * {
@@ -266,11 +270,105 @@ $conn->close();
                 padding: 14px;
             }
         }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0f29;
+            min-height: 100vh;
+            padding-top: 80px;
+            color: #4facfe;
+        }
+        .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #020B1C;  /* Darker blue from the image */
+    padding: 15px 30px;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.logo img {
+    height: 40px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 24px;  /* Increased spacing between buttons */
+    align-items: center;
+}
+
+.nav-link {
+    color: #4facfe;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    background: transparent;
+}
+
+/* Style for Create Meeting button */
+.nav-link.create-meeting {
+    color: #4FB3FE;  /* Light blue from the image */
+    border: none;
+}
+
+.nav-link.create-meeting i {
+    color: #4FB3FE;
+}
+
+/* Style for View Meetings button */
+.nav-link.view-meetings {
+    color: #4FB3FE;
+}
+
+/* Style for Logout button */
+.nav-link.logout {
+    color: #4FB3FE;
+}
+
+.nav-link:hover {
+    background: rgba(79, 179, 254, 0.1);
+}
+
+/* Icon styling */
+.nav-link i {
+    font-size: 16px;
+}
     </style>
 </head>
-<body>
     <div class="wave"></div>
     <div class="wave"></div>
+    <header class="header">
+    <a href="/Bseccopie/frontend/index.html" class="logo">
+        <img src="/Bseccopie/frontend/media/logo.png" alt="B-Secure Logo">
+    </a>
+    <nav class="nav-links">
+        <?php if ($_SESSION['role'] === 'admin'): ?>
+            <a href="/Bseccopie/createmeeting.php" class="nav-link create-meeting">
+                <i class="fas fa-plus"></i> Create Meeting
+            </a>
+        <?php endif; ?>
+        <a href="/Bseccopie/dashboard.php" class="nav-link view-meetings">
+            <i class="fas fa-calendar"></i> View Meetings
+        </a>
+        <a href="/Bseccopie/frontend/auth/logout.php" class="nav-link logout">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </nav>
+</header>
     <div class="container">
         <h1>Create a New Meeting</h1>
         <form action="createmeeting.php" method="POST">
