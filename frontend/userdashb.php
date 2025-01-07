@@ -1,24 +1,24 @@
 <?php
-session_start();
-require_once '../backend/connection.php';
+    session_start();
+    require_once '../backend/connection.php';
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: /Bseccopie/frontend/auth/login.php");
+        exit();
+    }
 
-$user_id = $_SESSION['user_id'];
-$query = "SELECT firstName, lastName, email, role, last_login FROM users WHERE id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
+    $user_id = $_SESSION['user_id'];
+    $query = "SELECT firstName, lastName, email, role, last_login FROM users WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
 
-$last_login = $user['last_login'] ? date('d/m/y H:i:s', strtotime($user['last_login'])) : 'Première connexion';
+    $last_login = $user['last_login'] ? date('d/m/y H:i:s', strtotime($user['last_login'])) : 'Première connexion';
 
-$stmt->close();
-$conn->close();
+    $stmt->close();
+    $conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -301,12 +301,12 @@ $conn->close();
         </a>
         <nav class="nav-links">
             <?php if ($user['role'] === 'admin'): ?>
-            <a href="/Bseccopie/createmeeting.php" class="nav-link">
+            <a href="/Bseccopie/frontend/createmeeting.php" class="nav-link">
                 <i class="fas fa-plus"></i>
                 Create Meeting
             </a>
             <?php endif; ?>
-            <a href="/Bseccopie/dashboard.php" class="nav-link">
+            <a href="/Bseccopie/frontend/dashboard.php" class="nav-link">
                 <i class="fas fa-calendar"></i>
                 View Meetings
             </a>
