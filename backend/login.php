@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $update_stmt->execute();
             $update_stmt->close();
 
-            header("Location: /frontend/userdashb.php");
+            header("Location: /B-SECURE-WEB-APP/frontend/userdashb.php");
             exit();
         } else {
             // Incorrect password
@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // Redirect back to login page with error
-    header("Location: /frontend/auth/login.php");
+    header("Location: /B-SECURE-WEB-APP/frontend/auth/login.php");
     exit();
 }
 

@@ -3,7 +3,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require_once('/Applications/XAMPP/xamppfiles/htdocs/Bseccopie/libraries/tcpdf/tcpdf.php');
+require_once('/Applications/XAMPP/xamppfiles/htdocs/B-SECURE-WEB-APP/libraries/tcpdf/tcpdf.php');
 require_once('../backend/connection.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -32,8 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Add a page
         $pdf->AddPage();
 
-        // Add logo at the top left
-        $pdf->Image('../frontend/media/logo2.png', 25, 15, 30);
+        // Add logo at the top left - Updated path to be relative to the current file
+        $logoPath = '../frontend/media/logo2.png';
+        if (file_exists($logoPath)) {
+            $pdf->Image($logoPath, 15, 15, 30);
+        }
 
         // HTML content
         $html = <<<EOD
@@ -158,8 +161,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } catch (Exception $e) {
         error_log("PDF Generation Error: " . $e->getMessage());
         $_SESSION['error'] = "Unable to generate invitation. Please try again later.";
-        header('Location: /frontend/dashboard.php');
+        header('Location: /B-SECURE-WEB-APP/frontend/dashboard.php');
         exit;
     }
 }
-?>  
+?>

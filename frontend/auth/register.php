@@ -61,7 +61,7 @@ unset($_SESSION['form_data']);
 
     <main class="main-content">
       <div class="form-container">
-        <form class="form" action="http://localhost/backend/testregistry.php" method="POST">
+        <form class="form" action="/B-SECURE-WEB-APP/backend/testregistry.php" method="POST">
           <p class="title">Register</p>
           <!-- Error Message Display -->
           <?php

@@ -3,7 +3,7 @@
     require_once '../backend/connection.php';
 
     if (!isset($_SESSION['user_id'])) {
-        header("Location: /frontend/auth/login.php");
+        header("Location: /B-SECURE-WEB-APP/frontend/auth/login.php");
         exit();
     }
 
@@ -296,21 +296,21 @@
 <body>
 
     <header class="header">
-        <a href="/frontend/index.html" class="logo">
-            <img src="/frontend/media/logo.png" alt="B-Secure Logo">
+        <a href="/B-SECURE-WEB-APP/frontend/index.html" class="logo">
+            <img src="/B-SECURE-WEB-APP/frontend/media/logo.png" alt="B-Secure Logo">
         </a>
         <nav class="nav-links">
             <?php if ($user['role'] === 'admin'): ?>
-            <a href="/frontend/createmeeting.php" class="nav-link">
+            <a href="/B-SECURE-WEB-APP/frontend/createmeeting.php" class="nav-link">
                 <i class="fas fa-plus"></i>
                 Create Meeting
             </a>
             <?php endif; ?>
-            <a href="/frontend/dashboard.php" class="nav-link">
+            <a href="/B-SECURE-WEB-APP/frontend/dashboard.php" class="nav-link">
                 <i class="fas fa-calendar"></i>
                 View Meetings
             </a>
-            <a href="/frontend/auth/login.php" class="nav-link">
+            <a href="/B-SECURE-WEB-APP/frontend/auth/login.php" class="nav-link">
                 <i class="fas fa-sign-out-alt"></i>
                 Logout
             </a>

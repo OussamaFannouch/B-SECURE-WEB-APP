@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($stmt->execute()) {
             // Registration successful
             $_SESSION['success'] = "Registration successful. Please log in.";
-            header("Location: /frontend/auth/login.php");
+            header("Location: /B-SECURE-WEB-APP/frontend/auth/login.php");
             exit();
         } else {
             $errors[] = "Failed to register. Please try again.";
@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $_SESSION['errors'] = $errors;
     $_SESSION['form_data'] = $_POST;
-    header("Location: /frontend/auth/register.php");
+    header("Location: /B-SECURE-WEB-APP/frontend/auth/register.php");
     exit();
 }
 ?>
