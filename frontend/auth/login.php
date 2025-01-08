@@ -51,7 +51,7 @@ session_start(); // Start session to access error messages
 
     <main class="main-content">
       <div class="form-container">
-        <form class="form" action="http://localhost/Bseccopie/backend/login.php" method="POST">
+        <form class="form" action="http://localhost/backend/login.php" method="POST">
           <p class="title">Login</p>
           
           <!-- Display Error Messages -->
