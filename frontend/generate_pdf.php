@@ -158,7 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } catch (Exception $e) {
         error_log("PDF Generation Error: " . $e->getMessage());
         $_SESSION['error'] = "Unable to generate invitation. Please try again later.";
-        header('Location: /Bseccopie/frontend/dashboard.php');
+        header('Location: /frontend/dashboard.php');
         exit;
     }
 }
