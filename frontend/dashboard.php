@@ -14,7 +14,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Check if user is logged in and get role
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /Bseccoppie/frontend/auth/login.php');
+    header('Location: /frontend/auth/login.php');
     exit();
 }
 
@@ -282,18 +282,18 @@ if (!$result) {
 <body>
     <header class="header">
         <div class="logo">
-            <img src="/Bseccopie/frontend/media/logo.png" alt="Cybersecurity Club Logo">
+            <img src="/frontend/media/logo.png" alt="Cybersecurity Club Logo">
         </div>
         <nav class="nav-buttons">
             <?php if ($userRole === 'admin'): ?>
-                <a href="/Bseccopie/frontend/createmeeting.php" class="nav-button create">
+                <a href="/frontend/createmeeting.php" class="nav-button create">
                     <i class="fas fa-plus"></i> Create Meeting
                 </a>
             <?php endif; ?>
-            <a href="/Bseccopie/frontend/dashboard.php" class="nav-button view">
+            <a href="/frontend/dashboard.php" class="nav-button view">
                 <i class="fas fa-calendar"></i> View Meetings
             </a>
-            <a href="/Bseccopie/frontend/auth/login.php" class="nav-button logout">
+            <a href="/frontend/auth/login.php" class="nav-button logout">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </nav>
@@ -329,7 +329,7 @@ if (!$result) {
                     <td><?php echo $row['date']; ?></td>
                     <td><?php echo $row['time']; ?></td>
                     <td>
-                        <form action="/Bseccopie/frontend/generate_pdf.php" method="POST" class="download-form">
+                        <form action="/frontend/generate_pdf.php" method="POST" class="download-form">
                             <input type="hidden" name="meeting_id" value="<?php echo $row['id']; ?>">
                             <input type="hidden" name="meeting_title" value="<?php echo htmlspecialchars($row['title']); ?>">
                             <input type="hidden" name="meeting_date" value="<?php echo $row['date']; ?>">
