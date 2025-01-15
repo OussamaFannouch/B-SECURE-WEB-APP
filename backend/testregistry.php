@@ -3,9 +3,29 @@ session_start();
 require_once '../backend/connection.php';
 
 function is_email_allowed($email) {
+    $blocklist_path = "../backend/disposable_email_blocklist.conf";
+
+    // Validate email format
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return "Invalid email format.";
     }
+
+    // Extract the domain
+    $domain = substr(strrchr($email, "@"), 1);
+
+    // Check if blocklist file exists
+    if (!file_exists($blocklist_path)) {
+        return "Warning: Blocklist file not found. Allowing email by default.";
+    }
+
+    // Read blocklist file
+    $blocked_domains = file($blocklist_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+    // Check if the domain is in the blocklist
+    if (in_array($domain, $blocked_domains)) {
+        return "Email is not allowed (Temporary emails are blacklisted).";
+    }
+
     return true;
 }
 

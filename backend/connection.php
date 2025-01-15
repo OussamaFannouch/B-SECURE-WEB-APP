@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "register";
+$dbname = "B-Secure-DB";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
